@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SIMBA Care Kit - Enhanced 3D Prototype</title>
     <style>
         * {
@@ -112,7 +112,7 @@
         
         #canvas-container {
             width: 100%;
-            height: 550px;
+            height: clamp(380px, 60vh, 550px);
             background: radial-gradient(circle, #334155 0%, #0f172a 100%);
             border-radius: 20px;
             overflow: hidden;
@@ -188,6 +188,61 @@
             margin-top: 20px;
             font-style: italic;
         }
+            /* Tambahan untuk tampilan mobile/Android */
+    @media (max-width: 600px) {
+        body {
+            padding: 8px;
+        }
+        .container {
+            padding: 0 4px;
+        }
+        .header h1 {
+            font-size: 26px;
+        }
+        .header p {
+            font-size: 13px;
+        }
+        .controls {
+            gap: 6px;
+        }
+        .btn {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+        .color-controls {
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-color {
+            width: 42px;
+            height: 42px;
+        }
+        #colorPicker {
+            width: 44px;
+            height: 44px;
+        }
+        #canvas-container {
+            height: 55vh;          /* pakai vh agar proporsional di HP */
+            min-height: 340px;     /* minimal supaya tidak terlalu kecil */
+            max-height: 520px;
+        }
+        .info-box {
+            padding: 14px;
+        }
+        .spec-card {
+            padding: 14px;
+        }
+        .spec-card h3 {
+            font-size: 16px;
+        }
+        .spec-card ul {
+            font-size: 13px;
+        }
+        .tip {
+            font-size: 11px;
+        }
+}
     </style>
 </head>
 <body>
@@ -296,7 +351,9 @@
 
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
+            controls.dampingFactor = 0.08;
+            controls.rotateSpeed = 1.0;             // default 1.0, bisa dinaikkan ke 1.2 kalau terasa lambat
+            controls.zoomSpeed = 1.2;
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
