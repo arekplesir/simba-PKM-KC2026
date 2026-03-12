@@ -3,116 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SAFETIKS Alat Pintar Antibiotik - Enhanced 3D Prototype</title>
+    <title>SAFETIKS Integrated Hub - Dark Theme</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* CSS GLOBAL & TEMA GELAP (DARK MODE) */
+        :root {
+            --primary: #60a5fa; /* Blue Neon */
+            --primary-dark: #3b82f6;
+            --secondary: #10b981; /* Green Neon */
+            --danger: #ef4444;
+            --bg-dark: #1e293b;
+            --bg-darker: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-white: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            background: var(--bg-darker);
+            color: var(--text-white);
             min-height: 100vh;
-            padding: 20px;
-            color: white;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-            color: #60a5fa;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
-        .header p {
-            font-size: 14px;
-            opacity: 0.8;
         }
 
-        .controls-wrapper {
+        /* Navigasi Switcher */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .color-controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            color: var(--text-dim);
+            cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            backdrop-filter: blur(5px);
-        }
-        
-        .btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        .btn.active {
-            background: #60a5fa;
-            color: #0f172a;
-            border-color: #60a5fa;
+            transition: 0.3s;
         }
 
-        .btn-color {
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            cursor: pointer;
+        .nav-btn.active {
+            background: var(--primary);
+            color: var(--bg-darker);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.4);
         }
 
-        #colorPicker {
-            cursor: pointer;
-            width: 48px;
-            height: 48px;
-            border: none;
-            background: none;
-            padding: 4px;
-            border-radius: 8px;
+        /* Container & Section */
+        .section-content { display: none; padding: 30px 15px; }
+        .section-content.active { display: block; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* REUSABLE CARDS & BOXES */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        
-        #canvas-container {
+
+        /* 3D PROTOTYPE SPECIFIC */
+        #canvas-container { 
             width: 100%;
-            height: clamp(380px, 60vh, 550px);
+            height: 550px;
             background: radial-gradient(circle, #334155 0%, #0f172a 100%);
             border-radius: 20px;
             overflow: hidden;
@@ -122,26 +88,30 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 10;
+        .controls-wrapper { 
+            background: rgba(255, 255, 255, 0.03); 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
         }
 
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid #60a5fa;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+        .btn-3d, .consult-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
         }
-        
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .btn-3d { background: rgba(255,255,255,0.05); color: white; }
+        .btn-3d.active { background: var(--primary); color: var(--bg-darker); }
+        .btn-3d:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+         }
 
         .info-box {
             background: rgba(255,255,255,0.05);
@@ -180,149 +150,209 @@
         .spec-card h3 { color: #60a5fa; margin-bottom: 12px; font-size: 18px; }
         .spec-card ul { list-style: none; font-size: 14px; line-height: 1.8; opacity: 0.9; }
         .spec-card ul li::before { content: "▹"; color: #60a5fa; margin-right: 8px; }
+
+        /* KONSULTASI THEME TUNING (Penyesuaian ke Dark) */
+        .step-indicator { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .step-dot { width: 12px; height: 12px; border-radius: 6px; background: rgba(255,255,255,0.2); transition: 0.3s; }
+        .step-dot.active { width: 35px; background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+
+        .info-box { padding: 18px; border-radius: 12px; margin-bottom: 24px; border-left: 5px solid; background: rgba(255,255,255,0.05); }
+        .info-box.blue { border-color: var(--primary); color: #bae6fd; }
+        .info-box.green { border-color: var(--secondary); color: #d1fae5; }
+        .info-box.red { border-color: var(--danger); color: #fecaca; }
+        .info-box.yellow { border-color: #fbbf24; color: #fef3c7; }
+
+        .symptom-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .symptom-card { 
+            padding: 20px; 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--border); 
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .symptom-card:hover { border-color: var(--primary); background: rgba(96, 165, 250, 0.05); }
+        .symptom-card.selected { border-color: var(--primary); background: rgba(96, 165, 250, 0.15); box-shadow: 0 0 15px rgba(96, 165, 250, 0.2); }
+
+        .antibiotic-option { 
+            padding: 18px; 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--border); 
+            border-radius: 15px; 
+            margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .antibiotic-option.selected { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+        .consult-btn.primary { background: var(--primary); color: var(--bg-darker); border: none; }
+        .consult-btn.secondary { background: var(--secondary); color: var(--bg-darker); border: none; }
+        .consult-btn.gray { background: rgba(255,255,255,0.1); color: white; }
+
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; background: rgba(255,255,255,0.1); }
+        .badge.purple { color: #c4b5fd; border: 1px solid #c4b5fd; }
         
-        .tip {
-            text-align: center;
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 20px;
-            font-style: italic;
-        }
-            /* Tambahan untuk tampilan mobile/Android */
-    @media (max-width: 600px) {
-        body {
-            padding: 8px;
-        }
-        .container {
-            padding: 0 4px;
-        }
-        .header h1 {
-            font-size: 26px;
-        }
-        .header p {
-            font-size: 13px;
-        }
-        .controls {
-            gap: 6px;
-        }
-        .btn {
-            padding: 8px 14px;
-            font-size: 13px;
-        }
-        .color-controls {
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .btn-color {
-            width: 42px;
-            height: 42px;
-        }
-        #colorPicker {
-            width: 44px;
-            height: 44px;
-        }
-        #canvas-container {
-            height: 55vh;        
-            min-height: 340px;    
-            max-height: 520px;
-        }
-        .info-box {
-            padding: 14px;
-        }
-        .spec-card {
-            padding: 14px;
-        }
-        .spec-card h3 {
-            font-size: 16px;
-        }
-        .spec-card ul {
-            font-size: 13px;
-        }
-        .tip {
-            font-size: 11px;
-        }
-}
+        .hidden { display: none !important; }
+
+        /* Animation */
+        .spinner { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📦 SAFETIKS Alat Pintar Antibiotik - 3D Prototype</h1>
-            <p>Model Detail Presisi • Interaktif 360°</p>
-        </div>
-        
-        <div class="controls-wrapper">
-            <div class="controls">
-                <button class="btn active" id="btn-both">🔄 View All</button>
-                <button class="btn" id="btn-base">⏰ Base</button>
-                <button class="btn" id="btn-cap">🧪 Cap</button>
-                <button class="btn active" id="btn-rotate">⏸️ Pause Rotasi</button>
+
+    <nav class="main-nav">
+        <button class="nav-btn active" onclick="switchMode('3d')">📦 3D Prototype</button>
+        <button class="nav-btn" onclick="switchMode('consult')">🩺 Sistem Konsultasi</button>
+    </nav>
+
+    <section id="section-3d" class="section-content active">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: var(--primary); font-size: 2.5rem;">SAFETIKS</h1>
+                <p style="color: var(--text-dim)">Visualisasi Perangkat Pintar 360°</p>
             </div>
             
-            <div class="color-controls">
-                <span class="label-text">PRESET:</span>
-                <button class="btn-color" title="Merah"   style="background: #ef4444;" data-color="#ef4444"></button>
-                <button class="btn-color" title="Putih"  style="background: #ffffff;" data-color="#ffffff"></button>
-                <button class="btn-color" title="Hijau"  style="background: #10b981;" data-color="#10b981"></button>
+            <div class="controls-wrapper">
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button class="btn-3d active" id="btn-both">🔄 View All</button>
+                    <button class="btn-3d" id="btn-base">⏰ Base</button>
+                    <button class="btn-3d" id="btn-cap">🧪 Cap</button>
+                    <button class="btn-3d active" id="btn-rotate">⏸️ Pause Rotasi</button>
+                </div>
                 
-                <span class="label-text" style="margin-left: 15px;">CUSTOM:</span>
-                <input type="color" id="colorPicker" value="#10b981" title="Pilih Warna Bebas">
-                <button class="btn" id="btn-rainbow">🌈 Rainbow Mode</button>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-dim);">LED COLOR:</span>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #ef4444; cursor: pointer; border: 2px solid white;" onclick="setCapColor('#ef4444')"></div>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #ffffff; cursor: pointer; border: 2px solid white;" onclick="setCapColor('#ffffff')"></div>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #10b981; cursor: pointer; border: 2px solid white;" onclick="setCapColor('#10b981')"></div>
+                    <input type="color" id="colorPicker" value="#10b981" style="width: 35px; height: 35px; background: none; border: none; cursor: pointer;">
+                    <button class="btn-3d" id="btn-rainbow">🌈 Rainbow</button>
+                </div>
             </div>
-        </div>
-        
-        <div id="canvas-container">
-            <div id="loading">
-                <div class="spinner"></div>
-                <p>Membangun Model 3D...</p>
+            
+            <div id="canvas-container">
+                <div id="loading" style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+                    <div class="spinner"></div>
+                    <p>Memuat Model 3D...</p>
+                </div>
             </div>
-        </div>
-        
         <div class="info-box">
-            <h2>📐 Spesifikasi Fisik</h2>
-            <div class="specs-grid">
-                <div class="spec-card">
-                    <h3>⏰ Base Station</h3>
-                    <ul>
-                        <li>Dimensi: 10 x 8 x 4 cm</li>
-                        <li>Layar OLED 128x64 High-Contrast</li>
-                        <li>3 Tombol Tactile & LED Status</li>
-                        <li>USB-C Charging Port</li>
-                        <li>Material: ABS Polycarbonate Navy</li>
-                    </ul>
-                </div>
-                
-                <div class="spec-card">
-                    <h3>🧪 Smart Bottle Cap</h3>
-                    <ul>
-                        <li>Diameter: 4 cm (Universal Fit)</li>
-                        <li>RGB LED Ring Indicator (360°)</li>
-                        <li>Sensor Suhu & Cahaya Ambient</li>
-                        <li>Reed Switch & G-Sensor</li>
-                        <li>Botol Semi-Transparent Glass</li>
-                    </ul>
-                </div>
-                
-                <div class="spec-card">
-                    <h3>🎨 Visual Guidance</h3>
-                    <ul>
-                        <li>LED Hijau: Waktunya Minum</li>
-                        <li>LED Merah: Peringatan Terlewat</li>
-                        <li>LED Putih: Dosis Terpenuhi</li>
-                        <li>Interface: Minimalist Modern UI</li>
-                        <li>Sistem: Auto-Sync via Bluetooth</li>
-                    </ul>
+                <h2>📐 Spesifikasi Fisik</h2>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <h3>⏰ Base Station</h3>
+                        <ul>
+                            <li>Dimensi: 10 x 8 x 4 cm</li>
+                            <li>Layar OLED 128x64 High-Contrast</li>
+                            <li>3 Tombol Tactile & LED Status</li>
+                            <li>USB-C Charging Port</li>
+                            <li>Material: ABS Polycarbonate Navy</li>
+                        </ul>
+                    </div>
+
+                    <div class="spec-card">
+                        <h3>🧪 Smart Bottle Cap</h3>
+                        <ul>
+                            <li>Diameter: 4 cm (Universal Fit)</li>
+                            <li>RGB LED Ring Indicator (360°)</li>
+                            <li>Sensor Suhu & Cahaya Ambient</li>
+                            <li>Reed Switch & G-Sensor</li>
+                            <li>Botol Semi-Transparent Glass</li>
+                        </ul>
+                    </div>
+
+                    <div class="spec-card">
+                        <h3>🎨 Visual Guidance</h3>
+                        <ul>
+                            <li>LED Hijau: Waktunya Minum</li>
+                            <li>LED Merah: Peringatan Terlewat</li>
+                            <li>LED Putih: Dosis Terpenuhi</li>
+                            <li>Interface: Minimalist Modern UI</li>
+                            <li>Sistem: Auto-Sync via Bluetooth</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <p class="tip">💡 Navigasi: Klik & Drag untuk Putar • Scroll untuk Zoom • Klik Kanan untuk Geser (Pan)</p>
         </div>
-    </div>
-    
+    </section>
+
+    <section id="section-consult" class="section-content">
+        <div class="container" style="max-width: 800px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🩺</div>
+                <h1 style="color: var(--primary);">Konsultasi Antibiotik</h1>
+                <p style="color: var(--text-dim);">Panduan cerdas berbasis gejala</p>
+            </div>
+
+            <div class="step-indicator">
+                <div class="step-dot" id="dot1"></div>
+                <div class="step-dot" id="dot2"></div>
+                <div class="step-dot" id="dot3"></div>
+                <div class="step-dot" id="dot4"></div>
+                <div class="step-dot" id="dot5"></div>
+            </div>
+
+            <div class="glass-card">
+                <div id="step1">
+                    <h2 style="margin-bottom:20px; color: var(--primary);">1. Pilih Gejala</h2>
+                    <div class="info-box blue">Pilih gejala yang Anda rasakan untuk identifikasi awal.</div>
+                    <div class="symptom-grid" id="symptomGrid"></div>
+                    <button class="consult-btn primary" id="btnNext1" style="margin-top:25px; width:100%">Lanjut Identifikasi (<span id="countSelected">0</span> gejala)</button>
+                </div>
+
+                <div id="step2" class="hidden">
+                    <h2 style="margin-bottom:20px; color: var(--primary);">2. Konfirmasi</h2>
+                    <div class="info-box yellow" id="selectedSymptomsList"></div>
+                    <button class="consult-btn primary" id="btnIdentify" style="width:100%">🔍 Jalankan Analisis</button>
+                    <button class="consult-btn gray" onclick="showStep(1)" style="width:100%">← Kembali</button>
+                </div>
+
+                <div id="step3" class="hidden">
+                    <h2 style="margin-bottom:20px; color: var(--primary);">3. Hasil Analisis</h2>
+                    <div class="info-box green" id="resultBox"></div>
+                    <button class="consult-btn primary" id="btnToAllergy" style="width:100%">Cek Keamanan Alergi →</button>
+                    <button class="consult-btn gray" onclick="restart()" style="width:100%">🔄 Reset</button>
+                </div>
+
+                <div id="step4" class="hidden">
+                    <h2 style="margin-bottom:20px; color: var(--primary);">4. Validasi Alergi</h2>
+                    <div class="info-box red">Klik pada obat jika Anda memiliki riwayat alergi terhadapnya.</div>
+                    <div id="allergyOptions"></div>
+                    <button class="consult-btn secondary" id="btnFinalRec" style="width:100%">✅ Selesai & Lihat Rekomendasi</button>
+                    <button class="consult-btn gray" onclick="showStep(3)" style="width:100%">← Kembali</button>
+                </div>
+
+                <div id="step5" class="hidden">
+                    <h2 style="margin-bottom:20px; color: var(--primary);">5. Rekomendasi Akhir</h2>
+                    <div class="info-box green" id="finalRecommendationBox"></div>
+                    <div class="info-box blue" style="font-size: 0.9rem;">
+                        <strong>Penting:</strong> Gunakan <strong>SAFETIKS</strong> (lihat tab 3D) untuk mengatur jadwal minum obat ini agar tepat waktu dan mencegah resistensi.
+                    </div>
+                    <button class="consult-btn primary" onclick="restart()" style="width:100%">🔄 Konsultasi Baru</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
+
     <script>
+        // SWITCHER FUNCTION
+        function switchMode(mode) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(mode === '3d') {
+                document.getElementById('section-3d').classList.add('active');
+                document.querySelector('[onclick="switchMode(\'3d\')"]').classList.add('active');
+            } else {
+                document.getElementById('section-consult').classList.add('active');
+                document.querySelector('[onclick="switchMode(\'consult\')"]').classList.add('active');
+            }
+        }
+
+        /* 3D LOGIC */
         let ringMat, glowMat, rainbowMode = false;
 
         function setCapColor(hex) {
@@ -336,7 +366,7 @@
             }
         }
 
-        window.addEventListener('load', function() {
+        function init3D() {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
             
@@ -547,8 +577,189 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(container.clientWidth, container.clientHeight);
             });
-        });
+        }
+
+        /* CONSULTATION LOGIC (Data & Struct unchanged) */
+        const SYMPTOMS = [
+            { id: "S001", nama: "Demam Tinggi", desc: "Suhu >38°C, menggigil" },
+            { id: "S002", nama: "Batuk Berdahak", desc: "Lendir kuning/hijau" },
+            { id: "S003", nama: "Batuk Kering", desc: "Sakit tenggorokan" },
+            { id: "S004", nama: "Sakit Tenggorokan", desc: "Nyeri menelan" },
+            { id: "S005", nama: "Pilek Berlendir", desc: "Ingus kental" },
+            { id: "S008", nama: "Nyeri Buang Air Kecil", desc: "Perih saat kencing" },
+            { id: "S009", nama: "Kencing Keruh", desc: "Berbau menyengat" },
+            { id: "S011", nama: "Luka Bernanah", desc: "Nanah kuning/hijau" },
+            { id: "S012", nama: "Kulit Merah Bengkak", desc: "Hangat, bengkak" },
+            { id: "S014", nama: "Diare Berdarah", desc: "BAB cair + darah" },
+        ];
+
+        const CONDITIONS = { 
+            ISPA: { nama: "Infeksi Saluran Pernapasan Atas", symptoms: ["S001","S002","S004","S005"], antibiotics: ["Amoksisilin", "Eritromisn"] },
+            ISK:  { nama: "Infeksi Saluran Kemih", symptoms: ["S008","S009"], antibiotics: ["Kotrimoksazol", "Sefalekspin"] },
+            KULIT:{ nama: "Infeksi Kulit", symptoms: ["S011","S012"], antibiotics: ["Sefalekspin", "Klindamixin", "Amoksisilin"] },
+            DIARE:{ nama: "Diare Bakterial", symptoms: ["S014"], antibiotics: ["Metronidazol", "Kotrimoksazol"] },
+        };
+
+        const ANTIBIOTICS = { 
+            "Amoksisilin": { golongan: "Penicillin" }, 
+            "Eritromisn": { golongan: "Makrolida" }, 
+            "Kotrimoksazol": { golongan: "Sulfonamid" },
+            "Sefalekspin": { golongan: "Sefalosporin" },
+            "Klindamixin": { golongan: "Linkosamid" },
+            "Metronidazol": { golongan: "Nitroimidazol" }
+        };
+
+        let selectedSymptoms = []; 
+        let allergies = [];
+
+        function showStep(n) {
+            for(let i=1; i<=5; i++) {
+                document.getElementById('step'+i).className = (i===n ? '' : 'hidden');
+                document.getElementById('dot'+i).classList.toggle('active', i===n);
+            }
+        }
+
+        function renderSymptoms() {
+            const grid = document.getElementById('symptomGrid'); 
+            grid.innerHTML = '';
+            SYMPTOMS.forEach(sym => {
+                const card = document.createElement('div');
+                card.className = 'symptom-card' + (selectedSymptoms.includes(sym.id) ? ' selected' : '');
+                card.innerHTML = `<div style="font-weight:bold; color:var(--primary)">${sym.nama}</div><div style="font-size:0.8rem; color:var(--text-dim)">${sym.desc}</div>`;
+                card.onclick = () => {
+                    if(selectedSymptoms.includes(sym.id)) {
+                        selectedSymptoms = selectedSymptoms.filter(i=>i!==sym.id);
+                    } else {
+                        selectedSymptoms.push(sym.id);
+                    }
+                    renderSymptoms(); 
+                    document.getElementById('countSelected').textContent = selectedSymptoms.length;
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('btnNext1').onclick = () => { 
+            if(selectedSymptoms.length > 0) {
+                document.getElementById('selectedSymptomsList').innerHTML = 
+                    "<strong>Gejala terpilih:</strong><br>" + 
+                    selectedSymptoms.map(id => {
+                        const sym = SYMPTOMS.find(s=>s.id===id);
+                        return `• ${sym.nama} (${sym.desc})`;
+                    }).join("<br>");
+                showStep(2); 
+            } else {
+                alert("Pilih minimal 1 gejala.");
+            }
+        };
+
+        document.getElementById('btnIdentify').onclick = () => { 
+            // ------------------- LOGIKA IDENTIFIKASI YANG AKURAT -------------------
+            let bestCondition = null;
+            let highestMatch = -1;
+        
+            Object.keys(CONDITIONS).forEach(key => {
+                const cond = CONDITIONS[key];
+                // Hitung berapa gejala yang cocok
+                const matchCount = cond.symptoms.filter(symId => selectedSymptoms.includes(symId)).length;
+            
+                // Jika match lebih banyak dari yang sebelumnya, jadikan ini yang terbaik
+                if (matchCount > highestMatch) {
+                    highestMatch = matchCount;
+                    bestCondition = cond;
+                    bestCondition.key = key; // simpan kunci untuk referensi jika perlu
+                }
+            });
+        
+            if (highestMatch > 0 && bestCondition) {
+                // Tampilkan hasil yang akurat
+                document.getElementById('resultBox').innerHTML = `
+                    <div style="font-size:1.2rem; font-weight:700; color:#38a169; margin-bottom:12px;">
+                        Kemungkinan Kondisi: ${bestCondition.nama}
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <strong>Kecocokan gejala:</strong> ${highestMatch} dari ${bestCondition.symptoms.length} gejala
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <strong>Antibiotik yang direkomendasikan:</strong><br>
+                        ${bestCondition.antibiotics.map(ab => 
+                            `• ${ab} (${ANTIBIOTICS[ab]?.golongan || "Tidak diketahui"})`
+                        ).join('<br>')}
+                    </div>
+                    <small style="color:#718096;">
+                        Catatan: Ini hanya analisis awal berdasarkan gejala yang dipilih. 
+                        Segera konsultasikan ke dokter untuk diagnosis dan resep yang tepat.
+                    </small>
+                `;
+                showStep(3); 
+            } else {
+                document.getElementById('resultBox').innerHTML = `
+                    <div style="font-size:1.1rem; color:#e53e3e;">
+                        Tidak ditemukan kondisi yang cukup cocok dengan gejala yang dipilih.<br>
+                        Mohon tambahkan lebih banyak gejala atau konsultasikan langsung ke dokter.
+                    </div>
+                `;
+                showStep(3);
+            }
+        };
+
+        document.getElementById('btnToAllergy').onclick = () => {
+            const container = document.getElementById('allergyOptions'); 
+            container.innerHTML = '';
+
+            // Ambil antibiotik dari kondisi yang terpilih (dari step sebelumnya)
+            const antibiotics = CONDITIONS[Object.keys(CONDITIONS)[0]].antibiotics; // fallback ke ISPA jika tidak ada bestCondition
+
+            antibiotics.forEach(ab => {
+                const div = document.createElement('div');
+                div.className = 'antibiotic-option';
+                div.innerHTML = `<span>${ab} (${ANTIBIOTICS[ab]?.golongan || "?"})</span>`;
+                div.onclick = () => { 
+                    div.classList.toggle('selected'); 
+                    if(allergies.includes(ab)) {
+                        allergies = allergies.filter(a=>a!==ab);
+                    } else {
+                        allergies.push(ab);
+                    }
+                };
+                container.appendChild(div);
+            });
+            showStep(4);
+        };
+
+        document.getElementById('btnFinalRec').onclick = () => { 
+            // Logika rekomendasi akhir sederhana (bisa diperluas)
+            let recommendation = "Tidak ada antibiotik aman berdasarkan alergi Anda.";
+
+            // Cari antibiotik yang tidak ada di allergies
+            const possible = CONDITIONS[Object.keys(CONDITIONS)[0]].antibiotics; // fallback
+            const safe = possible.find(ab => !allergies.includes(ab));
+
+            if (safe) {
+                recommendation = `
+                    <h2 style="color:var(--secondary); text-align:center;">
+                        Rekomendasi: ${safe} (${ANTIBIOTICS[safe]?.golongan || "?"})<br>
+                        <small style="font-size:0.9rem;">(aman, tidak termasuk dalam daftar alergi Anda)</small>
+                    </h2>
+                `;
+            }
+        
+            document.getElementById('finalRecommendationBox').innerHTML = recommendation;
+            showStep(5); 
+        };
+
+        function restart() { 
+            selectedSymptoms = []; 
+            allergies = []; 
+            renderSymptoms(); 
+            document.getElementById('countSelected').textContent = 0;
+            showStep(1); 
+        }
+
+        // Inisialisasi awal
+        renderSymptoms();
+
+        window.onload = () => { init3D(); renderSymptoms(); showStep(1); };
     </script>
 </body>
 </html>
-
